@@ -243,7 +243,7 @@ function drawHUD(S,me){const W=VW.W,u=Math.min(1,W/820,VW.H<500?.78:1),n=S.F.len
 function render(S,dt,me){const W=VW.W,H=VW.H;cx.fillStyle='#0d0d0f';cx.fillRect(0,0,W,H);
  const top=H<500?100:118,full=Math.min(W/(2*RING+120),(H-top-8)/(2*RING+120)),al=S.F.filter(f=>!f.gone&&f.hp>0);let sc=full,tx=0,ty=0;
  if(al.length){const xs=al.map(f=>f.x),ys=al.map(f=>f.y),x0=Math.min(...xs),x1=Math.max(...xs),y0=Math.min(...ys),y1=Math.max(...ys);tx=(x0+x1)/2;ty=(y0+y1)/2;
-  const z=Math.min(W/(x1-x0+230),(H-top-8)/(y1-y0+230));sc=cl(z,full,full*2.8)}
+  const pd=TOUCH?90:110,z=Math.min(W/(x1-x0+pd*1.6),(H-top-8)/(y1-y0+pd));sc=cl(z,full,full*5)}
  if(!CAM.z){CAM.x=tx;CAM.y=ty;CAM.z=sc}else{const k=1-Math.exp(-5*dt);CAM.x+=(tx-CAM.x)*k;CAM.y+=(ty-CAM.y)*k;CAM.z+=(sc-CAM.z)*k}
  sc=CAM.z;VW.s=sc;VW.ox=W/2;VW.oy=top+(H-top)/2;VW.cx=CAM.x;VW.cy=CAM.y;
  FX.sh*=Math.exp(-9*dt);const shx=(rnd()-.5)*FX.sh,shy=(rnd()-.5)*FX.sh;
