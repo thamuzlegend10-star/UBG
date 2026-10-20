@@ -1,7 +1,8 @@
 'use strict';
 /* ================= CONFIG + DATA ================= */
 const KEY='tdba-save-v1',PFX='tdba-room-',ABC='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',REST=.5,ROUND_T=90,WINR=2,RING=280,SNAP_MS=66,IN_MS=33;
-const ICE=[{urls:'stun:stun.l.google.com:19302'},{urls:'stun:stun.relay.metered.ca:80'}].concat((typeof window!=='undefined'&&window.TURN_SERVERS)||[]);
+const MU='1d676475c53bd584694643e3',MC='HRo8LpXR0azCwMul';
+const ICE=[{urls:'stun:stun.relay.metered.ca:80'},{urls:'stun:stun.l.google.com:19302'},...['turn:global.relay.metered.ca:80','turn:global.relay.metered.ca:80?transport=tcp','turn:global.relay.metered.ca:443','turns:global.relay.metered.ca:443?transport=tcp','turn:standard.relay.metered.ca:80','turn:standard.relay.metered.ca:443?transport=tcp'].map(u=>({urls:u,username:MU,credential:MC})),...((typeof window!=='undefined'&&window.TURN_SERVERS)||[])];
 const cl=(v,a,b)=>v<a?a:v>b?b:v,TAU=Math.PI*2,rnd=Math.random,r1=v=>Math.round(v*10)/10,r2=v=>Math.round(v*100)/100;
 const adiff=(a,b)=>{let d=(a-b)%TAU;if(d>Math.PI)d-=TAU;if(d<-Math.PI)d+=TAU;return d};
 const STY=['basic','slugger','ghost','counter','ippo','hitman'];
@@ -163,7 +164,7 @@ function lobby(){G.stop();const xp=SV.xp/need(SV.lvl)*100;
  <div class="card" style="margin:16px 0"><div class="row sp"><input type="text" id="nm" maxlength="12" value="${SV.name}" style="max-width:170px" aria-label="Username" title="Your username"><span class="tag">Lv ${SV.lvl}</span></div>
  <div class="bar" style="margin:12px 0 4px"><i style="width:${xp}%"></i></div><small>${SV.xp} / ${need(SV.lvl)} XP</small>
  <div class="row sp" style="margin-top:10px"><span>Coins <b style="color:var(--gd)">${SV.coins}</b></span><span>${SV.w}W - ${SV.l}L</span><span>${emb(SV.style,18)} ${ST[SV.style].n}</span></div></div>
- <div class="grid g2"><button class="gd" data-a="play" title="Offline match vs AI">Play</button><button data-a="online" title="Host or join a room">Online play</button><button class="gh" data-a="styles">Style selection</button><button class="gh" data-a="train">Training</button><button class="gh" data-a="stats">Stats</button><button class="gh" data-a="sets">Settings</button></div></div>
+ <div class="grid g2"><button class="gd" data-a="play" title="Offline match vs AI">Play</button><button data-a="online" title="Host or join a room">Online play</button><button class="gh" data-a="styles">Style selection</button><button class="gh" data-a="train">Training</button><button class="gh" data-a="stats">Stats</button><button class="gh" data-a="sets">Settings</button><button class="gh" data-a="fs" style="grid-column:1/-1" title="Toggle fullscreen (F)">Toggle fullscreen</button></div></div>
  <div><div class="card"><canvas class="pv" id="pv0" width="240" height="240" style="height:200px"></canvas><div class="row sp" style="margin-top:10px"><b>Daily reward</b><button class="gh" data-a="daily" ${SV.daily===today()?'disabled':''}>${SV.daily===today()?'Claimed':'Claim 150 coins'}</button></div></div>
  <div class="card" style="margin-top:12px"><b>Controls</b>${ctrlRef()}</div></div></div></div>`);
  $('#nm').onchange=e=>{SV.name=cleanN(e.target.value)||'Fighter';e.target.value=SV.name;save()}}
@@ -264,7 +265,7 @@ const G={mode:null,sim:null,S:null,run:false,paused:false,me:'p0',last:0,acc:0,p
  pause(p){if(!this.run)return;this.paused=p;if(p){this.pauseUI()}else hide();this.touchUI();this.release();if(!p&&this.mode==='train')this.trainUI()},
  release(){for(const k in K)K[k]=0;joy.on=false;joy.x=joy.y=0;IN.mx=IN.my=0;IN.g=0;IN.sp=0;$('#knob').style.transform='';document.querySelectorAll('.tb.on').forEach(e=>e.classList.remove('on'))},
  touchUI(){$('#tc').classList.toggle('on',TOUCH&&this.run&&!this.paused&&scr==='')},
- pauseUI(){const on=this.mode==='ai'||this.mode==='train';show('pause',`<div class="w s"><h2>Paused</h2><p class="mu">${on?'Combat and timers are frozen.':'Online match continues while this menu is open.'}</p><div class="grid"><button class="gd" data-a="resume">Resume</button><button class="gh" data-a="hsets">Settings and controls</button><button class="gh" data-a="leave">Return to lobby</button></div></div>`)},
+ pauseUI(){const on=this.mode==='ai'||this.mode==='train';show('pause',`<div class="w s"><h2>Paused</h2><p class="mu">${on?'Combat and timers are frozen.':'Online match continues while this menu is open.'}</p><div class="grid"><button class="gd" data-a="resume">Resume</button><button class="gh" data-a="hsets">Settings and controls</button><button class="gh" data-a="fs">Toggle fullscreen</button><button class="gh" data-a="leave">Return to lobby</button></div></div>`)},
  start(mode,roster){this.stop();AU.init();this.mode=mode;this.ended=false;this.rewarded=false;this.paused=false;this.lastE=0;this.pv={};this.disp={};
   const df=SV.set.df;let pl;
   if(mode==='ai'){const os=STY[rnd()*STY.length|0];this.me='p0';pl=[{id:'p0',name:SV.name,style:SV.style},{id:'ai1',name:'CPU '+ST[os].n,style:os,ai:df}]}
@@ -393,4 +394,15 @@ const Net={peer:null,conns:[],host:false,code:'',me:'p0',players:[],inMatch:fals
   show('wait','<div class="w s"><h2>Starting...</h2><p class="mu">Waiting for all players to be ready.</p></div>');
   const t0=Date.now(),chk=()=>{if(!this.inMatch)return;const all=this.conns.every(c=>c.ready);if(all||Date.now()-t0>3500){G.start('host',ro);G.me='p0'}else this.readyT=setTimeout(chk,100)};chk()}};
 addEventListener('beforeunload',()=>{try{if(Net.hc&&Net.hc.open)Net.hc.send({t:'leave'})}catch(e){}});
+
+/* ================= FULLSCREEN + LANDSCAPE ================= */
+const de=document.documentElement,fsEl=()=>document.fullscreenElement||document.webkitFullscreenElement,fsOK=()=>!!(de.requestFullscreen||de.webkitRequestFullscreen);
+function goFs(){if(fsEl()||!fsOK())return;try{const r=(de.requestFullscreen||de.webkitRequestFullscreen).call(de);const lk=()=>{try{screen.orientation&&screen.orientation.lock&&screen.orientation.lock('landscape').catch(()=>{})}catch(e){}};if(r&&r.then)r.then(lk).catch(()=>{});else lk()}catch(e){}}
+function toggleFs(){if(fsEl()){try{(document.exitFullscreen||document.webkitExitFullscreen).call(document)}catch(e){}}else goFs()}
+const rotChk=()=>{const r=$('#rot');if(r)r.classList.toggle('on',TOUCH&&innerHeight>innerWidth)};
+addEventListener('resize',rotChk);addEventListener('orientationchange',()=>setTimeout(rotChk,150));rotChk();
+const autoFs=()=>{if(!fsEl())goFs()};document.addEventListener('pointerdown',autoFs,{once:true});document.addEventListener('keydown',autoFs,{once:true});
+document.addEventListener('fullscreenchange',()=>{setTimeout(resize,100);if(!fsEl())document.addEventListener('pointerdown',autoFs,{once:true})});
+addEventListener('keydown',e=>{if(e.code==='KeyF'&&!(e.target&&e.target.tagName==='INPUT')&&fsOK())toggleFs()});
+act.fs=toggleFs;
 lobby();
