@@ -7,12 +7,12 @@ const cl=(v,a,b)=>v<a?a:v>b?b:v,TAU=Math.PI*2,rnd=Math.random,r1=v=>Math.round(v
 const adiff=(a,b)=>{let d=(a-b)%TAU;if(d>Math.PI)d-=TAU;if(d<-Math.PI)d+=TAU;return d};
 const STY=['basic','slugger','ghost','counter','ippo','hitman'];
 const ST={
-basic:{n:'Basic',col:'#d9d9d4',hp:100,spd:150,jab:7,hv:16,rng:48,def:.55,stam:160,gb:100,cost:.85,reg:28,cdS:6,sc:14,su:1,dd:85,desc:'Balanced all-rounder with a reliable jab and cross.',pas:'Fundamentals: actions cost 15% less stamina; recovery stays steady.',sig:'Straight Combination',str:'No bad matchups',wk:'No standout strength'},
-slugger:{n:'Slugger',col:'#d4694a',hp:105,spd:122,jab:8,hv:27,rng:46,def:.6,stam:160,gb:110,cost:1.3,reg:21,cdS:8,sc:28,su:1.2,dd:80,desc:'Heavy hitter. Slow startup, enormous power.',pas:'Heavy Hands: heavy punches hit harder and stagger longer.',sig:'Power Hook',str:'Huge damage and knockback',wk:'Slow, stamina hungry, misses are punished'},
-ghost:{n:'Ghost',col:'#8fb6d9',hp:92,spd:182,jab:5.5,hv:12,rng:46,def:.4,stam:128,gb:80,cost:.9,reg:26,cdS:5,sc:18,su:.9,dd:125,desc:'Evasive fighter with long dodges and fast legs.',pas:'Elusive: a perfect dodge grants a short speed bonus and resets dodge cooldown.',sig:'Phantom Step',str:'Mobility, dodge distance',wk:'Low damage, small stamina pool'},
-counter:{n:'Counter',col:'#b78fd9',hp:100,spd:150,jab:7,hv:16,rng:48,def:.75,stam:160,gb:140,cost:1,reg:25,cdS:7,sc:12,su:1.05,dd:85,desc:'Defensive specialist who wins by timing.',pas:'Read the Opponent: a dodge or block opens a counter window (+50% damage).',sig:'Counter Strike',str:'Best guard, huge counters',wk:'Weak when forced to attack; bad timing is punished'},
-ippo:{n:'Ippo',col:'#e0a24b',hp:100,spd:165,jab:6,hv:15,rng:38,def:.5,stam:165,gb:95,cost:1.2,reg:23,cdS:9,sc:35,su:.9,dd:85,desc:'Close-range pressure fighter built on fast combinations.',pas:'Fighting Spirit: clean hits build a pressure meter (up to +33% damage). Taking damage drains it.',sig:'Dempsey-Style Rush',str:'Pressure, quick combos',wk:'Short range, burns stamina'},
-hitman:{n:'Hitman',col:'#7fc1a0',hp:100,spd:148,jab:7,hv:15,rng:64,def:.4,stam:160,gb:80,cost:1,reg:25,cdS:8,sc:15,su:.95,dd:85,desc:'Long-range precision boxer who controls space.',pas:'Precision: hits near maximum range deal +20% damage.',sig:'Long Guard',str:'Range, spacing',wk:'Weak guard, struggles up close'}};
+basic:{n:'Basic',col:'#d9d9d4',hp:100,spd:150,jab:7,hv:16,rng:48,def:.55,stam:160,gb:100,cost:.85,reg:28,cdS:6,sc:14,su:1,dd:60,desc:'Balanced all-rounder with a reliable jab and cross.',pas:'Fundamentals: actions cost 15% less stamina; recovery stays steady.',sig:'Straight Combination',str:'No bad matchups',wk:'No standout strength'},
+slugger:{n:'Slugger',col:'#d4694a',hp:105,spd:122,jab:8,hv:27,rng:46,def:.6,stam:160,gb:110,cost:1.3,reg:21,cdS:8,sc:28,su:1.2,dd:56,desc:'Heavy hitter. Slow startup, enormous power.',pas:'Heavy Hands: heavy punches hit harder and stagger longer.',sig:'Power Hook',str:'Huge damage and knockback',wk:'Slow, stamina hungry, misses are punished'},
+ghost:{n:'Ghost',col:'#8fb6d9',hp:92,spd:182,jab:5.5,hv:12,rng:46,def:.4,stam:128,gb:80,cost:.9,reg:26,cdS:5,sc:18,su:.9,dd:88,desc:'Evasive fighter with long dodges and fast legs.',pas:'Elusive: a perfect dodge grants a short speed bonus and resets dodge cooldown.',sig:'Phantom Step',str:'Mobility, dodge distance',wk:'Low damage, small stamina pool'},
+counter:{n:'Counter',col:'#b78fd9',hp:100,spd:150,jab:7,hv:16,rng:48,def:.75,stam:160,gb:140,cost:1,reg:25,cdS:7,sc:12,su:1.05,dd:60,desc:'Defensive specialist who wins by timing.',pas:'Read the Opponent: a dodge or block opens a counter window (+50% damage).',sig:'Counter Strike',str:'Best guard, huge counters',wk:'Weak when forced to attack; bad timing is punished'},
+ippo:{n:'Ippo',col:'#e0a24b',hp:100,spd:165,jab:6,hv:15,rng:38,def:.5,stam:165,gb:95,cost:1.2,reg:23,cdS:9,sc:35,su:.9,dd:60,desc:'Close-range pressure fighter built on fast combinations.',pas:'Fighting Spirit: clean hits build a pressure meter (up to +33% damage). Taking damage drains it.',sig:'Dempsey-Style Rush',str:'Pressure, quick combos',wk:'Short range, burns stamina'},
+hitman:{n:'Hitman',col:'#7fc1a0',hp:100,spd:148,jab:7,hv:15,rng:64,def:.4,stam:160,gb:80,cost:1,reg:25,cdS:8,sc:15,su:.95,dd:60,desc:'Long-range precision boxer who controls space.',pas:'Precision: hits near maximum range deal +20% damage.',sig:'Long Guard',str:'Range, spacing',wk:'Weak guard, struggles up close'}};
 const DIFF={easy:{rt:.55,err:.5,agg:.35,blk:.25,dg:.15},normal:{rt:.35,err:.3,agg:.55,blk:.45,dg:.3},hard:{rt:.2,err:.15,agg:.75,blk:.65,dg:.5},expert:{rt:.1,err:.05,agg:.9,blk:.8,dg:.7}};
 const PREF={basic:50,slugger:56,ghost:70,counter:62,ippo:34,hitman:90};
 const Z={mx:0,my:0,a:0,g:0,sp:0,jab:0,hv:0,dg:0,sg:0};
@@ -61,7 +61,7 @@ dash(f,dx,dy,l,dist,dur,inv,sig){let ux=dx,uy=dy;if(l<.1){ux=Math.cos(f.face+Mat
  f.state='dodge';f.t=0;f.dd=dur;f.inv=inv;f.da=0;f.sigd=sig;f.guard=false;f.dv=[ux*dist/dur,uy*dist/dur];this.ev({t:'wh',x:r1(f.x),y:r1(f.y)})}
 act(f,w,i,dx,dy,l){const S=f.S,c=S.cost*(f.style==='basic'?.85/.85:1);
  if(w==='sig'){if(f.cdS>0||f.st<S.sc*.5)return;f.st=Math.max(0,f.st-S.sc);f.cdS=S.cdS;this.ev({t:'sg',s:f.style,id:f.id,x:r1(f.x),y:r1(f.y),a:r2(i.a)});
-  if(f.style==='ghost'){this.dash(f,dx,dy,l,170,.24,.34,true);this.txt(f,'PHANTOM STEP');return}
+  if(f.style==='ghost'){this.dash(f,dx,dy,l,125,.24,.34,true);this.txt(f,'PHANTOM STEP');return}
   this.begin(f,this.sigSw(f),i.a);f.atk.sig=1;this.txt(f,S.sig.toUpperCase());return}
  if(w==='dodge'){if(f.cdD>0||f.st<8)return;f.st-=14*(f.style==='ghost'?.65:1);this.dash(f,dx,dy,l,S.dd,.2,f.style==='ghost'?.22:.18,false);f.cdD=f.style==='ghost'?.45:.7;return}
  const hv=w==='hv';if(f.st<2)return;f.st=Math.max(0,f.st-(hv?15:6)*c);
@@ -379,12 +379,12 @@ function render(S,dt,me){const W=VW.W,H=VW.H;cx.fillStyle='#0d0d0f';cx.fillRect(
  {const mf=al.find(f=>f.id===me);let tg=null;
   if(mf){let bd=1e9;al.forEach(o=>{if(o!==mf){const d=Math.hypot(o.x-mf.x,o.y-mf.y);if(d<bd){bd=d;tg=Math.atan2(o.y-mf.y,o.x-mf.x)}}})}
   else if(al.length>1)tg=Math.atan2(al[1].y-al[0].y,al[1].x-al[0].x);
-  if(tg!=null){if(CAM.h==null)CAM.h=tg;else CAM.h+=adiff(tg,CAM.h)*(1-Math.exp(-2.5*dt))}
-  const h=CAM.h||0,ch=Math.cos(h),sh=Math.sin(h);
-  if(al.length){tx=al.reduce((q,f)=>q+f.x,0)/al.length;ty=al.reduce((q,f)=>q+f.y,0)/al.length;let ex=0,ey=0;al.forEach(f=>{const dx=f.x-tx,dy=f.y-ty;ex=Math.max(ex,Math.abs(dx*ch+dy*sh));ey=Math.max(ey,Math.abs(-dx*sh+dy*ch))});
+  if(tg!=null){if(CAM.h==null)CAM.h=tg;else{const df=adiff(tg,CAM.h),ab=Math.abs(df);if(ab>.65)CAM.h+=Math.sign(df)*(ab-.65)*(1-Math.exp(-1.2*dt))}}
+  const h=(CAM.h||0)+Math.PI/2,ch=Math.cos(h),sh=Math.sin(h);
+  if(al.length){tx=al.reduce((q,f)=>q+f.x,0)/al.length;ty=al.reduce((q,f)=>q+f.y,0)/al.length;if(mf){tx+=Math.cos(CAM.h||0)*45;ty+=Math.sin(CAM.h||0)*45}let ex=0,ey=0;al.forEach(f=>{const dx=f.x-tx,dy=f.y-ty;ex=Math.max(ex,Math.abs(dx*ch+dy*sh));ey=Math.max(ey,Math.abs(-dx*sh+dy*ch))});
    const pd=TOUCH?90:110,z=Math.min((W-2*px)/(2*ex+pd*1.6),(H-top-8)/(2*ey+pd));sc=cl(z,full*1.15,full*1.8)}}
  if(!CAM.z){CAM.x=tx;CAM.y=ty;CAM.z=sc}else{const k=1-Math.exp(-4*dt);CAM.x+=(tx-CAM.x)*k;CAM.y+=(ty-CAM.y)*k;CAM.z+=(sc-CAM.z)*(1-Math.exp(-1.5*dt))}
- if(RC.hud!==top){RC.hud=top;document.documentElement.style.setProperty('--hud',top+'px')}sc=CAM.z;VW.s=sc;VW.ox=W/2;VW.oy=top+(H-top)/2;VW.cx=CAM.x;VW.cy=CAM.y;VW.rot=CAM.h||0;
+ if(RC.hud!==top){RC.hud=top;document.documentElement.style.setProperty('--hud',top+'px')}sc=CAM.z;VW.s=sc;VW.ox=W/2;VW.oy=top+(H-top)/2;VW.cx=CAM.x;VW.cy=CAM.y;VW.rot=(CAM.h||0)+Math.PI/2;
  FX.sh*=Math.exp(-9*dt);const shx=(rnd()-.5)*FX.sh,shy=(rnd()-.5)*FX.sh;
  cx.save();cx.translate(VW.ox+shx,VW.oy+shy);cx.scale(sc,sc);cx.rotate(-VW.rot);cx.translate(-VW.cx,-VW.cy);if(!RC.c)buildRing();cx.drawImage(RC.c,-RC.h,-RC.h,RC.h*2,RC.h*2);
  FX.ring.forEach(r=>{r.l-=dt;cx.strokeStyle='rgba(143,182,217,'+Math.max(0,r.l*2)+')';cx.lineWidth=3;cx.beginPath();cx.arc(r.x,r.y,(.4-r.l)*140,0,TAU);cx.stroke()});FX.ring=FX.ring.filter(r=>r.l>0);
