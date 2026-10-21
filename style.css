@@ -62,3 +62,35 @@ details{font-size:12px;color:var(--mu);margin-top:8px}details b{color:var(--tx);
 #emo{position:fixed;right:max(12px,env(safe-area-inset-right));top:calc(var(--hud,86px) + 8px);display:flex;flex-direction:column;align-items:flex-end;gap:4px;pointer-events:none;z-index:6}
 .emj{display:flex;align-items:center;gap:8px;background:#18181dcc;border:1px solid var(--ln);border-radius:9999px;padding:2px 12px 2px 10px;animation:emj 2.4s ease-out forwards}.emj span{font-size:24px;line-height:1.3}.emj small{font-size:11px;color:var(--mu)}
 @keyframes emj{0%{opacity:0;transform:translateY(-10px) scale(.7)}10%{opacity:1;transform:none}80%{opacity:1}100%{opacity:0;transform:translateY(12px)}}
+
+/* ===== v2 redesign ===== */
+:root{--p1:#15151a;--p2:#1d1d23;--ln:#2b2b33;--gd:#d4a94f;--gd2:#ecc977;--r:12px;--shadow:0 10px 30px -12px #000a;--ring:0 0 0 2px #0d0d0f,0 0 0 4px #d4a94f}
+html{color-scheme:dark}::selection{background:#d4a94f55}
+#ui{background:radial-gradient(1100px 560px at 50% -10%,#d4a94f14,transparent 60%),radial-gradient(800px 480px at 100% 100%,#4aa3ff0d,transparent 60%),rgba(10,10,12,.96);contain:layout style;scrollbar-width:thin;scrollbar-color:#2b2b33 transparent}
+.card{background:linear-gradient(180deg,#1a1a20,#15151a);border-radius:var(--r);box-shadow:inset 0 1px 0 #ffffff0a,var(--shadow)}
+.card.eq{border-color:var(--gd);box-shadow:inset 0 1px 0 #ffffff0a,0 0 0 1px #d4a94f55,0 12px 36px -14px #d4a94f66}
+h1{font-size:clamp(30px,5.2vw,52px);line-height:1;letter-spacing:-.035em;text-wrap:balance}
+h1 b{background:linear-gradient(180deg,#f3d58a,#c9a24b);-webkit-background-clip:text;background-clip:text;color:transparent}
+h2{letter-spacing:-.02em}
+button,.btn{min-height:44px;border-radius:8px;transition:transform .12s,background .15s,border-color .15s,box-shadow .2s;touch-action:manipulation}
+button:hover:not(:disabled){transform:translateY(-1px)}button:active:not(:disabled){transform:scale(.98)}
+button.gd{background:linear-gradient(180deg,#e6bd63,#c9a24b);border-color:#e6bd63;color:#15110a;box-shadow:0 8px 22px -10px #d4a94f}
+button.gd:hover:not(:disabled){background:linear-gradient(180deg,#f0cb7a,#d4a94f);box-shadow:0 10px 26px -8px #d4a94f}
+button.gh{background:#ffffff05}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:0;box-shadow:var(--ring)}
+input[type=text]{border-radius:8px;min-height:44px;background:#0f0f12}input[type=text]:focus{border-color:var(--gd);box-shadow:0 0 0 3px #d4a94f22}
+.bar{height:8px;border-radius:9999px;background:#0f0f12;border:1px solid var(--ln)}.bar i{background:linear-gradient(90deg,#c9a24b,#ecc977);border-radius:inherit;transition:width .4s cubic-bezier(.16,1,.3,1)}
+.tag{background:#d4a94f1f;border:1px solid #d4a94f40}
+table tr:hover td{background:#ffffff04}.code{text-shadow:0 0 30px #d4a94f55}
+.pv{border-radius:8px;background:radial-gradient(circle at 50% 40%,#1b1b21,#0d0d0f)}
+#dlg.on .card{animation:pop .22s cubic-bezier(.16,1,.3,1)}@keyframes pop{from{opacity:0;transform:scale(.96) translateY(6px)}}
+#toast{border-radius:9999px;transform:translate(-50%,8px);transition:opacity .25s,transform .25s}#toast.on{transform:translate(-50%,0)}
+.tb{background:radial-gradient(circle at 35% 30%,#2a2a33e6,#14141acc);box-shadow:0 6px 16px -6px #000c,inset 0 1px 0 #ffffff1a;transition:transform .08s,background .1s}
+.tb:active,.tb.on{transform:scale(.94)}
+#b-jab{border-color:#d4a94faa;color:#f3d58a}#b-hv{border-color:#e0766aaa;color:#ffb3a8}#b-dg{border-color:#8fd0ffaa;color:#cfeaff}#b-sg{border-color:#c28bffaa;color:#e3ccff}
+.tb.on{color:#000!important}#b-jab.on{background:#d4a94f}#b-hv.on{background:#e0766a}#b-dg.on{background:#8fd0ff}#b-sg.on{background:#c28bff}
+#joy{background:radial-gradient(circle,#ffffff10,#ffffff04);box-shadow:inset 0 0 0 1px #ffffff12}
+#knob{background:radial-gradient(circle at 35% 30%,#ffffffcc,#ffffff66);box-shadow:0 4px 12px #0008;will-change:transform}
+@media(max-height:480px){#ui{padding-top:max(10px,env(safe-area-inset-top))}h1{font-size:28px}.card{padding:12px}.code{font-size:44px}}
+@media(pointer:coarse){button{min-height:48px}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
