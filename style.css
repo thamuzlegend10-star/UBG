@@ -148,3 +148,6 @@ table tr:hover td{background:#ffffff04}.code{text-shadow:0 0 30px #d4a94f55}
  .lb-dy{position:absolute;left:10px;right:10px;bottom:10px;width:auto;min-height:40px;margin:0;background:#0d0d0fe6;font-size:11px}
 }
 @media(max-height:360px) and (orientation:landscape){.lb-t h1{font-size:19px}.lb-pf .bar{margin:5px 0 3px}.lb-bt{gap:5px}.lb-bt>.lb-play,.lb-bt>.lb-on{min-height:38px}.lb-bt>.gh:not(.lb-fs){min-height:42px}.lb-av{width:28px;height:28px}.lb-pr input{min-height:30px}.lb-dy{min-height:34px}}
+
+/* cinematic moments (ring entrance): hide touch controls */
+.cine #tc,.cine #trn,.cine #eb{display:none!important}
