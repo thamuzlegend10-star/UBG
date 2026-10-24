@@ -151,3 +151,12 @@ table tr:hover td{background:#ffffff04}.code{text-shadow:0 0 30px #d4a94f55}
 
 /* cinematic moments (ring entrance): hide touch controls */
 .cine #tc,.cine #trn,.cine #eb{display:none!important}
+
+/* lobby banner + store */
+.bn{display:block;width:100%;height:clamp(150px,38vh,330px);border-radius:12px;border:1px solid var(--ln);background:#0c0c11}
+.lb-pw{padding:clamp(6px,1.2vh,10px)}
+@media(max-width:640px) and (orientation:portrait){.bn{height:clamp(170px,28vh,260px)}}
+@media(max-height:520px) and (orientation:landscape){.lb-pw .bn{height:100%;min-height:90px;border-radius:12px}}
+.lb-store{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;min-height:0;font-size:12px;border-color:var(--gd);color:var(--gd2);border-radius:99px}.lb-store .ic{width:14px;height:14px}
+.sc .spv{display:block;width:100%;height:84px;border-radius:8px;border:1px solid var(--ln)}
+.sc .price{color:var(--gd);font-weight:600;font-size:13px}.sh{margin:18px 0 8px;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--mu)}
