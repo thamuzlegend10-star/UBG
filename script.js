@@ -1,19 +1,19 @@
 'use strict';
 /* ================= CONFIG + DATA ================= */
-const KEY='tdba-save-v1',PFX='tdba-room-',ABC='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',REST=.5,ROUND_T=90,WINR=2,RING=280,SNAP_MS=33,IN_MS=20,GREG=26,GREG_HOLD=7,GDLY=.8;
+const KEY='tdba-save-v1',PFX='tdba-room-',ABC='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',REST=.5,ROUND_T=90,MAXR=5,RING=280,SNAP_MS=33,IN_MS=20,GREG=26,GREG_HOLD=7,GDLY=.8;
 const MU='1d676475c53bd584694643e3',MC='HRo8LpXR0azCwMul';
 const ICE=[{urls:'stun:stun.relay.metered.ca:80'},{urls:'stun:stun.l.google.com:19302'},...['turn:global.relay.metered.ca:80','turn:global.relay.metered.ca:80?transport=tcp','turn:global.relay.metered.ca:443','turns:global.relay.metered.ca:443?transport=tcp','turn:standard.relay.metered.ca:80','turn:standard.relay.metered.ca:443?transport=tcp'].map(u=>({urls:u,username:MU,credential:MC})),...((typeof window!=='undefined'&&window.TURN_SERVERS)||[])];
 const cl=(v,a,b)=>v<a?a:v>b?b:v,TAU=Math.PI*2,rnd=Math.random,r1=v=>Math.round(v*10)/10,r2=v=>Math.round(v*100)/100;
 const adiff=(a,b)=>{let d=(a-b)%TAU;if(d>Math.PI)d-=TAU;if(d<-Math.PI)d+=TAU;return d};
 const STY=['basic','slugger','ghost','counter','ippo','hitman','kimura'];
 const ST={
-basic:{n:'Basic',col:'#d9d9d4',hp:100,spd:150,jab:7,hv:16,rng:48,def:.55,stam:160,gb:100,cost:.85,reg:28,cdS:6,sc:14,su:1,dd:60,desc:'Balanced all-rounder with a reliable jab and cross.',pas:'Fundamentals: actions cost 15% less stamina; recovery stays steady.',sig:'Final Combination',str:'No bad matchups',wk:'No standout strength'},
-slugger:{n:'Slugger',col:'#d4694a',hp:105,spd:122,jab:8,hv:27,rng:46,def:.6,stam:160,gb:110,cost:1.3,reg:21,cdS:8,sc:28,su:1.2,dd:56,desc:'Heavy hitter. Slow startup, enormous power.',pas:'Heavy Hands: heavy punches hit harder and stagger longer.',sig:'Meteor Hook',str:'Huge damage and knockback',wk:'Slow, stamina hungry, misses are punished'},
-ghost:{n:'Ghost',col:'#8fb6d9',hp:92,spd:182,jab:5.5,hv:12,rng:46,def:.4,stam:128,gb:80,cost:.9,reg:26,cdS:5,sc:18,su:.9,dd:88,desc:'Evasive fighter with long dodges and fast legs.',pas:'Elusive: a perfect dodge grants a short speed bonus and resets dodge cooldown.',sig:'Phantom Barrage',str:'Mobility, dodge distance',wk:'Low damage, small stamina pool'},
-counter:{n:'Counter',col:'#b78fd9',hp:100,spd:150,jab:7,hv:16,rng:48,def:.75,stam:160,gb:140,cost:1,reg:25,cdS:7,sc:12,su:1.05,dd:60,desc:'Defensive specialist who wins by timing.',pas:'Read the Opponent: a dodge or block opens a counter window (+50% damage).',sig:'Mirror Break',str:'Best guard, huge counters',wk:'Weak when forced to attack; bad timing is punished'},
-ippo:{n:'Ippo',col:'#e0a24b',hp:100,spd:165,jab:6,hv:15,rng:38,def:.5,stam:165,gb:95,cost:1.2,reg:23,cdS:9,sc:35,su:.9,dd:60,desc:'Close-range pressure fighter built on fast combinations.',pas:'Fighting Spirit: clean hits build a pressure meter (up to +33% damage). Taking damage drains it.',sig:'Dempsey Rush',str:'Pressure, quick combos',wk:'Short range, burns stamina'},
-hitman:{n:'Hitman',col:'#7fc1a0',hp:100,spd:148,jab:7,hv:15,rng:64,def:.4,stam:160,gb:80,cost:1,reg:25,cdS:8,sc:15,su:.95,dd:60,desc:'Long-range precision boxer who controls space.',pas:'Precision: hits near maximum range deal +20% damage.',sig:'Kill Shot',str:'Range, spacing',wk:'Weak guard, struggles up close'},
-kimura:{n:'Kimura',col:'#e8466a',hp:100,spd:146,jab:6.5,hv:15,rng:50,def:.5,stam:160,gb:90,cost:1,reg:25,cdS:9,sc:26,su:.85,dd:60,desc:'Body-snatching pressure boxer who wears opponents down jab by jab.',pas:'Attrition: every clean jab slows the opponent\'s punches and walking by 5%, stacking up to 40%. Stacks reset at the start of the next round.',sig:'Dragonfish',str:'Snowballing control, strong body work',wk:'Needs jabs to land before it gets going'}};
+basic:{n:'Basic',col:'#d9d9d4',hp:150,spd:150,jab:7,hv:16,rng:48,def:.55,stam:160,gb:100,cost:.85,reg:28,cdS:6,sc:14,su:1,dd:60,desc:'Balanced all-rounder with a reliable jab and cross.',pas:'Fundamentals: actions cost 15% less stamina; recovery stays steady.',sig:'Final Combination',str:'No bad matchups',wk:'No standout strength'},
+slugger:{n:'Slugger',col:'#d4694a',hp:158,spd:122,jab:8,hv:27,rng:46,def:.6,stam:160,gb:110,cost:1.3,reg:21,cdS:8,sc:28,su:1.2,dd:56,desc:'Heavy hitter. Slow startup, enormous power.',pas:'Heavy Hands: heavy punches hit harder and stagger longer.',sig:'Meteor Hook',str:'Huge damage and knockback',wk:'Slow, stamina hungry, misses are punished'},
+ghost:{n:'Ghost',col:'#8fb6d9',hp:138,spd:182,jab:5.5,hv:12,rng:46,def:.4,stam:128,gb:80,cost:.9,reg:26,cdS:5,sc:18,su:.9,dd:88,desc:'Evasive fighter with long dodges and fast legs.',pas:'Elusive: a perfect dodge grants a short speed bonus and resets dodge cooldown.',sig:'Phantom Barrage',str:'Mobility, dodge distance',wk:'Low damage, small stamina pool'},
+counter:{n:'Counter',col:'#b78fd9',hp:150,spd:150,jab:7,hv:16,rng:48,def:.75,stam:160,gb:140,cost:1,reg:25,cdS:7,sc:12,su:1.05,dd:60,desc:'Defensive specialist who wins by timing.',pas:'Read the Opponent: a dodge or block opens a counter window (+50% damage).',sig:'Mirror Break',str:'Best guard, huge counters',wk:'Weak when forced to attack; bad timing is punished'},
+ippo:{n:'Ippo',col:'#e0a24b',hp:150,spd:165,jab:6,hv:15,rng:38,def:.5,stam:165,gb:95,cost:1.2,reg:23,cdS:9,sc:35,su:.9,dd:60,desc:'Close-range pressure fighter built on fast combinations.',pas:'Fighting Spirit: clean hits build a pressure meter (up to +33% damage). Taking damage drains it.',sig:'Dempsey Rush',str:'Pressure, quick combos',wk:'Short range, burns stamina'},
+hitman:{n:'Hitman',col:'#7fc1a0',hp:150,spd:148,jab:7,hv:15,rng:64,def:.4,stam:160,gb:80,cost:1,reg:25,cdS:8,sc:15,su:.95,dd:60,desc:'Long-range precision boxer who controls space.',pas:'Precision: hits near maximum range deal +20% damage.',sig:'Kill Shot',str:'Range, spacing',wk:'Weak guard, struggles up close'},
+kimura:{n:'Kimura',col:'#e8466a',hp:150,spd:146,jab:6.5,hv:15,rng:50,def:.5,stam:160,gb:90,cost:1,reg:25,cdS:9,sc:26,su:.85,dd:60,desc:'Body-snatching pressure boxer who wears opponents down jab by jab.',pas:'Attrition: every clean jab slows the opponent\'s punches and walking by 5%, stacking up to 40%. Stacks reset at the start of the next round.',sig:'Dragonfish',str:'Snowballing control, strong body work',wk:'Needs jabs to land before it gets going'}};
 const DIFF={easy:{rt:.55,err:.5,agg:.35,blk:.25,dg:.15},normal:{rt:.35,err:.3,agg:.55,blk:.45,dg:.3},hard:{rt:.2,err:.15,agg:.75,blk:.65,dg:.5},expert:{rt:.1,err:.05,agg:.9,blk:.8,dg:.7}};
 const PREF={basic:50,slugger:56,ghost:70,counter:62,ippo:34,hitman:90,kimura:52};
 const Z={mx:0,my:0,a:0,g:0,sp:0,jab:0,hv:0,dg:0,sg:0};
@@ -139,7 +139,7 @@ check(dt){const al=this.F.filter(f=>!f.gone&&f.hp>0);
  if(this.o.train){this.F.forEach(f=>{if(f.hp<=0){f.rz+=dt;if(f.rz>1.4){f.rz=0;f.hp=f.S.hp;f.state='idle'}}});return}
  if(this.F.length>1&&al.length<=1)return this.endRound(al[0]||null,'KNOCKOUT');
  if(this.rt<=0){const s=al.slice().sort((a,b)=>b.hp-a.hp||b.stats.dmg-a.stats.dmg);this.endRound(s[0]&&(s.length<2||s[0].hp!==s[1].hp||s[0].stats.dmg!==s[1].stats.dmg)?s[0]:null,'DECISION')}}
-endRound(w,why){this.ph='rend';this.tm=3.2;if(w)w.rw++;this.rlog={w:w?w.id:null,n:w?w.name:'DRAW',why,rd:this.rd};this.fin=!!(w&&w.rw>=WINR)||this.rd>=5;this.ev({t:'rend'});this.F.forEach(f=>{f.guard=false})}
+endRound(w,why){this.ph='rend';this.tm=3.2;if(w)w.rw++;this.rlog={w:w?w.id:null,n:w?w.name:'DRAW',why,rd:this.rd};this.fin=why==="KNOCKOUT"||this.rd>=MAXR;this.ev({t:'rend'});this.F.forEach(f=>{f.guard=false})}
 next(){if(this.fin){this.ph='mend';const s=this.F.slice().sort((a,b)=>b.rw-a.rw||b.stats.dmg-a.stats.dmg);this.win=s[0].id;return}
  this.rd++;this.rt=ROUND_T;this.tm=3;this.ph='count';this.reset(false)}
 think(f,dt){const I=f.in,A=f.aiS,D=DIFF[f.ai]||DIFF.normal,S=f.S;let tg=null,bd=1e9;
@@ -622,7 +622,7 @@ function drawHUD(S,me){const M=hudM(),u=M.u,W=VW.W,n=S.F.length,mid=W/2,gap=M.ga
  const panel=(f,x)=>{const D=ST[f.style],isMe=f.id===me,w=pw;cx.globalAlpha=f.gone?.35:1;
   cx.font=`700 ${Math.max(11,12*u)}px system-ui,sans-serif`;cx.textBaseline='middle';cx.textAlign='left';cx.fillStyle=isMe?'#c9a24b':'#ecebe6';
   const nm=f.name.toUpperCase().slice(0,12);cx.save();cx.fillStyle=PCOL[S.F.indexOf(f)%4];cx.beginPath();cx.arc(x+5,M.nameC,4.5*u+.5,0,TAU);cx.fill();cx.restore();cx.fillText(nm,x+14,M.nameC);const nw=cx.measureText(nm).width+14;
-  for(let r=0;r<WINR;r++){cx.fillStyle=r<f.rw?'#c9a24b':'#2e2e35';cx.beginPath();cx.arc(x+nw+11+r*11*u,M.nameC,3.6*u+.5,0,TAU);cx.fill()}
+  for(let r=0;r<MAXR;r++){cx.fillStyle=r<f.rw?'#c9a24b':'#2e2e35';cx.beginPath();cx.arc(x+nw+11+r*11*u,M.nameC,3.6*u+.5,0,TAU);cx.fill()}
   cx.font=`600 ${Math.max(10,10.5*u)}px system-ui,sans-serif`;cx.textAlign='right';cx.fillStyle='#8d8c86';cx.fillText(D.n.toUpperCase(),x+w,M.nameC);
   bar(x,w,M.hpY,M.hpH,f.hp/D.hp,f.hp/D.hp>.3?'#c9a24b':'#b64a3c','HP');
   bar(x,w,M.stY,M.stH,f.st/D.stam,f.st<=0?'#b64a3c':f.st/D.stam<.25?'#d9a441':'#6fae7a','STA');
@@ -697,7 +697,7 @@ const G={mode:null,sim:null,S:null,run:false,paused:false,me:'p0',last:0,acc:0,p
   if(mode!=='client'){this.sim=new Sim(pl,{train:mode==='train'})}else{this.sim=null;this.S=null}
   IN.jab=IN.hv=IN.dg=IN.sg=0;CAM.z=0;CAM.h=null;this.sentE=0;this.run=true;hide();this.touchUI();this.last=performance.now();this.acc=0;this.snapT=0;this.inT=0;this.inQ=0;this.release();if(mode==='train')this.trainUI();
   cancelAnimationFrame(this.raf);this.raf=requestAnimationFrame(t=>this.frame(t));clearInterval(this.hid);this.hid=setInterval(()=>{if(document.hidden&&this.run)this.tick(.05)},50)},
- stop(){RF=null;CE=0;FX.bn=null;CIN.key='';CIN.on=false;ENT.last=-1;document.body.classList.remove('cine');this.run=false;cancelAnimationFrame(this.raf);clearInterval(this.hid);this.sim=null;this.S=null;this.sb=[];this.hb=0;this.lk='';this.slowT=0;this.pg=0;this.release();$('#trn').classList.remove('on');$('#tc').classList.remove('on');cx.clearRect(0,0,VW.W,VW.H);specUI()},
+ stop(){RF=null;CE=0;FX.bn=null;CIN.key='';CIN.on=false;ENT.last=-1;document.body.classList.remove('cine');this.run=false;cancelAnimationFrame(this.raf);clearInterval(this.hid);this.sim=null;this.S=null;this.sb=[];this.idl=60;this.jit=0;this.la=0;this.hb=0;this.lk='';this.slowT=0;this.pg=0;this.release();$('#trn').classList.remove('on');$('#tc').classList.remove('on');cx.clearRect(0,0,VW.W,VW.H);specUI()},
  trainUI(){const f=this.sim.F[0],d=this.sim.F[1],e=$('#trn');e.classList.add('on');
   e.innerHTML=`<button class="gh" id="t1">Spar: ${d.dummy?'off':'on'}</button><button class="gh" id="t2">Inf stamina: ${this.sim.o.inf?'on':'off'}</button><button class="gh" id="t3">Reset</button><button class="gh" id="t4">Style: ${ST[f.style].n}</button><button class="gd" id="t5">Lobby</button>`;
   $('#t1').onclick=()=>{d.dummy=!d.dummy;d.ai=d.dummy?null:SV.set.df;d.in=Object.assign({},Z);d.sj=d.sh=d.sd=d.ss=0;this.trainUI()};
@@ -730,7 +730,7 @@ const G={mode:null,sim:null,S:null,run:false,paused:false,me:'p0',last:0,acc:0,p
   S.F.forEach(f=>{const p=this.pv[f.id]||(this.pv[f.id]={x:f.x,y:f.y,mv:0});p.mv+=(Math.hypot(f.x-p.x,f.y-p.y)/Math.max(dt,.001)-p.mv)*Math.min(1,10*dt);p.x=f.x;p.y=f.y});
   render(S,dt,this.me)},
  smooth(S,dt){const k=1-Math.exp(-20*dt);return Object.assign({},S,{F:S.F.map(f=>{const d=this.disp[f.id]||(this.disp[f.id]={x:f.x,y:f.y,f:f.f});if(Math.hypot(f.x-d.x,f.y-d.y)>120){d.x=f.x;d.y=f.y}d.x+=(f.x-d.x)*k;d.y+=(f.y-d.y)*k;d.f+=adiff(f.f,d.f)*k;return Object.assign({},f,{x:d.x,y:d.y,f:d.f})})})},
- interp(){const B=this.sb;if(!B.length)return null;const rt=performance.now()-(this.spec?140:60);let i=0;while(i+1<B.length&&B[i+1].t<=rt)i++;
+ interp(){const B=this.sb;if(!B.length)return null;const rt=performance.now()-(this.spec?Math.max(140,this.idl||60):(this.idl||60));let i=0;while(i+1<B.length&&B[i+1].t<=rt)i++;
   for(let j=0;j<=i;j++)B[j].S.ev.forEach(e=>{if(e.e>this.lastE){this.lastE=e.e;fxEv(e)}});
   const a=B[i],b=B[i+1];if(i>0)B.splice(0,i);let u=0;if(b&&rt>a.t)u=Math.min(1,(rt-a.t)/Math.max(1,b.t-a.t));
   const F=a.S.F.map(fa=>{const fb=u>0&&b.S.F.find(x=>x.id===fa.id);if(!fb)return fa;const dx=fb.x-fa.x,dy=fb.y-fa.y;if(dx*dx+dy*dy>14400)return u>.5?fb:fa;const o=Object.assign({},fa);o.x=fa.x+dx*u;o.y=fa.y+dy*u;o.f=fa.f+adiff(fb.f,fa.f)*u;o.hp=fa.hp+(fb.hp-fa.hp)*u;return o});
@@ -738,7 +738,7 @@ const G={mode:null,sim:null,S:null,run:false,paused:false,me:'p0',last:0,acc:0,p
   if(o.cs){const nt=b&&b.S.cs&&b.S.cs.w===o.cs.w?b.S.cs.t:null;o.cs=Object.assign({},o.cs,{t:Math.min(o.cs.d,nt!=null?o.cs.t+(nt-o.cs.t)*u:o.cs.t+el)})}
   if(o.ph==='intro'){const ni=b&&b.S.ph==='intro'?b.S.it:null;o.it=Math.min(o.itT,ni!=null?o.it+(ni-o.it)*u:o.it+el)}
   return o},
- onSnap(S){if(this.mode!=='client')return;if(this.S&&S.q<=this.S.q)return;this.S=S;this.sb.push({t:performance.now(),S});if(this.sb.length>16)this.sb.shift()},
+ onSnap(S){if(this.mode!=='client')return;if(this.S&&S.q<=this.S.q)return;const n=performance.now();if(this.la){const iv=n-this.la,dv=Math.abs(iv-SNAP_MS);this.jit=(this.jit||0)*.92+dv*.08;if(iv>250)this.jit=Math.max(this.jit,iv/3)}this.la=n;const tg=Math.min(240,Math.max(60,SNAP_MS*1.6+(this.jit||0)*2.5));this.idl=(this.idl||60)+(tg-(this.idl||60))*(tg>(this.idl||60)?.15:.01);this.S=S;this.sb.push({t:n,S});if(this.sb.length>16)this.sb.shift()},
  end(res){this.release();this.touchUI();const me=res.F.find(f=>f.id===this.me),won=res.win===this.me,on=this.mode==='host'||this.mode==='client';let gain='';
   if(this.mode==='ai'&&me&&!this.rewarded){this.rewarded=true;const xp=40+(won?80:0)+Math.round(me.dmg*.6),co=won?120:35;SV.m++;won?SV.w++:SV.l++;SV.ko+=me.ko;SV.dmg+=me.dmg;SV.thr+=me.thr;SV.hit+=me.hit;SV.xp+=xp;SV.coins+=co;let lv=0;while(SV.xp>=need(SV.lvl)){SV.xp-=need(SV.lvl);SV.lvl++;lv++}save();gain=`<p><b style="color:var(--gd)">+${xp} XP · +${co} coins</b>${lv?` · LEVEL UP: ${SV.lvl}`:''}</p>`}
   else if(on)gain='<p class="mu">Online matches do not change your local record or rewards.</p>';
