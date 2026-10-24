@@ -139,7 +139,7 @@ check(dt){const al=this.F.filter(f=>!f.gone&&f.hp>0);
  if(this.o.train){this.F.forEach(f=>{if(f.hp<=0){f.rz+=dt;if(f.rz>1.4){f.rz=0;f.hp=f.S.hp;f.state='idle'}}});return}
  if(this.F.length>1&&al.length<=1)return this.endRound(al[0]||null,'KNOCKOUT');
  if(this.rt<=0){const s=al.slice().sort((a,b)=>b.hp-a.hp||b.stats.dmg-a.stats.dmg);this.endRound(s[0]&&(s.length<2||s[0].hp!==s[1].hp||s[0].stats.dmg!==s[1].stats.dmg)?s[0]:null,'DECISION')}}
-endRound(w,why){this.ph='rend';this.tm=3.2;if(w)w.rw++;this.rlog={w:w?w.id:null,n:w?w.name:'DRAW',why,rd:this.rd};this.fin=why==="KNOCKOUT"||this.rd>=MAXR;this.ev({t:'rend'});this.F.forEach(f=>{f.guard=false})}
+endRound(w,why){this.ph='rend';this.tm=3.2;if(w)w.rw++;this.rlog={w:w?w.id:null,n:w?w.name:'DRAW',why,rd:this.rd};this.fin=this.rd>=MAXR;this.ev({t:'rend'});this.F.forEach(f=>{f.guard=false})}
 next(){if(this.fin){this.ph='mend';const s=this.F.slice().sort((a,b)=>b.rw-a.rw||b.stats.dmg-a.stats.dmg);this.win=s[0].id;return}
  this.rd++;this.rt=ROUND_T;this.tm=3;this.ph='count';this.reset(false)}
 think(f,dt){const I=f.in,A=f.aiS,D=DIFF[f.ai]||DIFF.normal,S=f.S;let tg=null,bd=1e9;
@@ -713,7 +713,7 @@ const G={mode:null,sim:null,S:null,run:false,paused:false,me:'p0',last:0,acc:0,p
    else{const sx=(mouse.x-VW.ox)/VW.s,sy=(mouse.y-VW.oy)/VW.s,c=Math.cos(VW.rot),sn=Math.sin(VW.rot);a=Math.atan2(sx*sn+sy*c+VW.cy-m.y,sx*c-sy*sn+VW.cx-m.x)}}
   IN.mx=mx;IN.my=my;IN.a=a;IN.g=K.KeyQ||TB.g?1:0;IN.sp=K.ShiftLeft||K.ShiftRight?1:0;return IN},
  frame(now){if(!this.run)return;this.raf=requestAnimationFrame(t=>this.frame(t));const raw=now-this.last,dt=Math.min(.05,raw/1000);this.last=now;
-  if(raw>0&&raw<500){PERF.e+=(raw-PERF.e)*.05;if(!this.paused&&PERF.e>24){this.slowT+=raw;if(this.slowT>2500&&QL>0){QL--;this.slowT=0;PERF.e=16.7;resize()}}else this.slowT=Math.max(0,this.slowT-raw*.5)}
+  if(raw>0&&raw<500){PERF.e+=(raw-PERF.e)*.05;if(!this.paused&&PERF.e>20){this.slowT+=raw;if(this.slowT>1500&&QL>0){QL--;this.slowT=0;PERF.e=16.7;resize()}}else this.slowT=Math.max(0,this.slowT-raw*.5)}
   this.tick(dt)},
  tick(dt){TICK+=dt;let S;const I=this.localIn();
   if(this.mode==='client'){this.inT+=dt*1000;if(this.inT>=IN_MS){this.hb+=this.inT;this.inT=0;if(!this.spec){const k=[r2(I.mx),r2(I.my),r2(I.a),I.g,I.sp,I.jab,I.hv,I.dg,I.sg].join();if(k!==this.lk||this.hb>=120){this.lk=k;this.hb=0;Net.sendIn(I)}}}
